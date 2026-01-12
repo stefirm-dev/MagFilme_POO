@@ -29,7 +29,7 @@ public class MagazinApp {
         // 3. Demo POO
         demoClientiValidation();
 
-        // 4. Demo Streams: Interogare Complexă (Cerinta ta)
+        // 4. Demo Streams: Interogare Filme horror > 2009 (an lansare)
         demoStreamsInterogare();
 
         // 5. Demo Design Patterns: Builder, Polimorfism & Business Logic
@@ -121,7 +121,6 @@ public class MagazinApp {
         System.out.println("Factura PJ (SubTotal: " + facturaPJ.calculSubTotal() + ") -> Pret Final: " + facturaPJ.getPretTotal());
 
         // 5.3 Salvarea facturilor (JPA Transaction)
-        // Persistenta se face intr-o tranzactie separata pentru Facturi
         FilmRepositoryImpl repoWithEM = new FilmRepositoryImpl();
         try {
             repoWithEM.getEntityManager().getTransaction().begin();
