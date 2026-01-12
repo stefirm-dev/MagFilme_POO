@@ -7,4 +7,5 @@ public interface IClientRepository {
     Client getClientById(Integer id);
     Collection<Client> getAll();
     void add(Client client);
+    void remove(Client client); // Adăugați această linie
 }

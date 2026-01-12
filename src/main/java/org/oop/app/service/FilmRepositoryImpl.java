@@ -110,7 +110,7 @@ public class FilmRepositoryImpl implements IFilmRepository { // LINIE CORECTATĂ
         try {
             entityManager.getTransaction().begin();
             // Atenție: JPQL/HQL DELETE nu apelează cascade/orphanRemoval, trebuie făcut manual
-            entityManager.createQuery("DELETE FROM ArticolComanda a").executeUpdate();
+            entityManager.createQuery("DELETE FROM Articol a").executeUpdate();
             entityManager.createQuery("DELETE FROM Factura f").executeUpdate();
             entityManager.createQuery("DELETE FROM Client c").executeUpdate();
             entityManager.createQuery("DELETE FROM Film f").executeUpdate();

@@ -25,7 +25,7 @@ public class Factura {
     @JoinColumn(name = "id_client")
     @NonNull private Client client;
     @OneToMany(mappedBy = "factura", cascade = ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<ArticolComanda> articole = new ArrayList<>();
+    private List<Articol> articole = new ArrayList<>();
 
     @Setter(AccessLevel.NONE)
     private Double pretTotal; // Pretul dupa aplicarea reducerii/taxelor
@@ -44,7 +44,7 @@ public class Factura {
     }
 
     // Adaugarea logica a unui articol
-    public void adaugaArticol(ArticolComanda articol) {
+    public void adaugaArticol(Articol articol) {
         if (!this.articole.contains(articol)) {
             articol.setFactura(this); // Seteaza referinta inversa Factura pe Articol
             this.articole.add(articol);

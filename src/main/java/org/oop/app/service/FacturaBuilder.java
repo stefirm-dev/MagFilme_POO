@@ -1,6 +1,6 @@
 package org.oop.app.service;
 
-import org.oop.app.domain.ArticolComanda; // NOU
+import org.oop.app.domain.Articol; // NOU
 import org.oop.app.domain.Client;
 import org.oop.app.domain.Factura;
 
@@ -11,7 +11,7 @@ import java.util.List;
 // Builder Pattern
 public class FacturaBuilder {
     private Client client;
-    private List<ArticolComanda> articole = new ArrayList<>(); // NOU
+    private List<Articol> articole = new ArrayList<>(); // NOU
     private LocalDate dataVanzare = LocalDate.now();
 
     public FacturaBuilder forClient(Client client) {
@@ -19,7 +19,7 @@ public class FacturaBuilder {
         return this;
     }
 
-    public FacturaBuilder withArticol(ArticolComanda articol) { // NOU
+    public FacturaBuilder withArticol(Articol articol) { // NOU
         this.articole.add(articol);
         return this;
     }

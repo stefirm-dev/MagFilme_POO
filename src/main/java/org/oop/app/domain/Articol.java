@@ -9,7 +9,7 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor // Păstrează-l pentru JPA
 // Am eliminat @RequiredArgsConstructor pentru a evita conflictul
-public class ArticolComanda {
+public class Articol {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -21,7 +21,6 @@ public class ArticolComanda {
 
     @NonNull private Integer cantitate;
 
-    // Păstrăm @ToString.Exclude, dar mutăm @ToString pe header
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_factura")
@@ -33,14 +32,12 @@ public class ArticolComanda {
 
 
 
-    public ArticolComanda(@NonNull Film film, @NonNull Integer cantitate) {
+    public Articol(@NonNull Film film, @NonNull Integer cantitate) {
         this.film = film;
         this.cantitate = cantitate;
-        // LINIE CRITICĂ: Forțează calculul prețului la creare
         this.pretArticol = calculPretTotal();
     }
 
-    // Logica internă pentru calculul prețului (încapsulare comportamentală)
     private Double calculPretTotal(){
         if (film != null && cantitate != null) {
             return film.getPret() * cantitate;
@@ -48,13 +45,7 @@ public class ArticolComanda {
         return 0.0;
     }
 
-    // Metoda de setare care recalculează prețul articolului
-    public void setCantitate(Integer cantitate) {
-        this.cantitate = cantitate;
-        this.pretArticol = calculPretTotal();
-    }
 
-    // Folosim setter explicit pentru a declanșa recalcularea la schimbarea filmului
     public void setFilm(@NonNull Film film) {
         this.film = film;
         this.pretArticol = calculPretTotal();

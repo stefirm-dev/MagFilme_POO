@@ -1,74 +1,75 @@
 package org.oop.app.web;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.oop.app.domain.Film;
 import org.oop.app.service.FilmRepositoryImpl;
 
-
+@PageTitle("Filme | Magazin Filme")
 @Route(value = "", layout = MainLayout.class)
-@PageTitle("Filme | MagFilme")
 public class MainView extends VerticalLayout {
 
     private final FilmRepositoryImpl filmRepo = new FilmRepositoryImpl();
-    private final Grid<Film> grid = new Grid<>(Film.class);
-    private final TextField filterText = new TextField();
-    private final FilmForm form = new FilmForm();
+    private final Grid<Film> grid = new Grid<>();
+    private final FilmForm form = new FilmForm(); // Formularul tău pentru CRUD
 
     public MainView() {
-        addClassName("list-view");
         setSizeFull();
         configureGrid();
         configureForm();
 
-        add(getToolbar(), getContent());
+        Button addFilmButton = new Button("Adaugă Film Nou");
+        addFilmButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        addFilmButton.addClickListener(click -> addFilm());
+
+        HorizontalLayout mainContent = new HorizontalLayout(grid, form);
+        mainContent.setFlexGrow(2, grid);
+        mainContent.setFlexGrow(1, form);
+        mainContent.setSizeFull();
+
+        add(new H2("Gestiune Inventar Filme"), addFilmButton, mainContent);
+
         updateList();
         closeEditor();
     }
 
     private void configureGrid() {
         grid.setSizeFull();
-        grid.setColumns("idFilm", "titlu", "regizor", "anLansare", "gen", "pret");
-        grid.asSingleSelect().addValueChangeListener(e -> editFilm(e.getValue()));
+        grid.addColumn(Film::getIdFilm).setHeader("ID");
+        grid.addColumn(Film::getTitlu).setHeader("Titlu");
+        grid.addColumn(Film::getRegizor).setHeader("Regizor");
+        grid.addColumn(Film::getAnLansare).setHeader("An");
+        grid.addColumn(Film::getGen).setHeader("Gen");
+        grid.addColumn(Film::getPret).setHeader("Preț");
+
+        grid.asSingleSelect().addValueChangeListener(event -> editFilm(event.getValue()));
     }
 
     private void configureForm() {
-        // Logica butoanelor din formular
-        form.save.addClickListener(e -> saveFilm());
-        form.close.addClickListener(e -> closeEditor());
+        form.save.addClickListener(event -> saveFilm());
+
+        form.delete.addClickListener(event -> {
+            Film film = form.binder.getBean();
+            if (film != null) {
+                filmRepo.remove(film); // Asigură-te că metoda remove e în repo
+                updateList();
+                closeEditor();
+            }
+        });
+
+        form.close.addClickListener(event -> closeEditor());
     }
 
-    private HorizontalLayout getContent() {
-        HorizontalLayout content = new HorizontalLayout(grid, form);
-        content.setFlexGrow(2, grid);
-        content.setFlexGrow(1, form);
-        content.setSizeFull();
-        return content;
-    }
-
-    private HorizontalLayout getToolbar() {
-        filterText.setPlaceholder("Filtrează după titlu...");
-        filterText.setClearButtonVisible(true);
-        filterText.setValueChangeMode(ValueChangeMode.LAZY);
-        // Aici poti adauga logica de filtrare daca ai implementat-o in repo
-
-        Button addFilmButton = new Button("Adaugă Film");
-        addFilmButton.addClickListener(click -> addFilm());
-
-        return new HorizontalLayout(filterText, addFilmButton);
-    }
-
-    // Metodele de control (Controller) conform pag. 5 L8
     private void saveFilm() {
         Film film = form.binder.getBean();
         if (film != null) {
-            filmRepo.add(film);
+            filmRepo.add(film); // Folosește em.merge() sau em.persist()
             updateList();
             closeEditor();
         }

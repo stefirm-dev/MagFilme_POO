@@ -20,6 +20,23 @@ public class ClientRepositoryImpl implements IClientRepository {
     }
 
     @Override
+    public void remove(Client client) {
+        try {
+            // Căutăm entitatea gestionată de EntityManager pentru a o putea șterge
+            Client clientPersistent = entityManager.find(Client.class, client.getIdClient());
+            if (clientPersistent != null) {
+                entityManager.getTransaction().begin();
+                this.entityManager.remove(clientPersistent);
+                entityManager.getTransaction().commit();
+            }
+        } catch (Exception ex) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new RuntimeException("Eroare la ștergerea clientului: " + ex.getMessage());
+        }
+    }
+    @Override
     public Client getClientById(Integer id) {
         return this.entityManager.find(Client.class, id);
     }

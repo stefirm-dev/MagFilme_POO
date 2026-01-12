@@ -5,7 +5,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.IntegerField; // MODIFICAT AICI
+import com.vaadin.flow.component.textfield.IntegerField; //
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -17,11 +17,9 @@ public class FilmForm extends FormLayout {
     TextField titlu = new TextField("Titlu Film");
     TextField regizor = new TextField("Regizor");
 
-    // Folosim IntegerField pentru a se potrivi cu tipul Integer din entitatea Film
     IntegerField anLansare = new IntegerField("An Lansare");
     IntegerField durata = new IntegerField("Durată (minute)");
 
-    // Pretul ramane NumberField pentru ca in entitate este probabil Double/float
     NumberField pret = new NumberField("Preț");
     ComboBox<GenFilm> gen = new ComboBox<>("Gen");
 
@@ -34,7 +32,6 @@ public class FilmForm extends FormLayout {
     public FilmForm() {
         gen.setItems(GenFilm.values());
 
-        // Binder-ul va lega acum Integer -> Integer și Double -> Double
         binder.bindInstanceFields(this);
 
         add(titlu, regizor, anLansare, durata, pret, gen, createButtonsLayout());

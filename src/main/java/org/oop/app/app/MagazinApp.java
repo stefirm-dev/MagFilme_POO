@@ -97,11 +97,11 @@ public class MagazinApp {
         Film filmHorror = filmRepo.getFilmById(2);
         Film filmComedie = filmRepo.getFilmById(4);
 
-        // 5.1 CREARE FACTURA PENTRU PF (FARA DISCOUNT) - BUILDER PATTERN
+        /* 5.1 CREARE FACTURA PENTRU PF (FARA DISCOUNT) - */
         Factura facturaPF = new FacturaBuilder()
                 .forClient(clientPF)
-                .withArticol(new ArticolComanda(filmHorror, 2))
-                .withArticol(new ArticolComanda(filmComedie, 1))
+                .withArticol(new Articol(filmHorror, 2))
+                .withArticol(new Articol(filmComedie, 1))
                 .build();
 
         // BUSINESS LOGIC & POLIMORFISM
@@ -112,7 +112,7 @@ public class MagazinApp {
         // 5.2 CREARE FACTURA PENTRU PJ (CU DISCOUNT) - JPA PERSIST
         Factura facturaPJ = new FacturaBuilder()
                 .forClient(clientPJ)
-                .withArticol(new ArticolComanda(filmHorror, 5))
+                .withArticol(new Articol(filmHorror, 5))
                 .build();
 
         // BUSINESS LOGIC & POLIMORFISM
